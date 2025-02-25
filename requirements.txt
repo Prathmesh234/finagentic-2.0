@@ -1,0 +1,15 @@
+fpdf
+semantic_kernel
+datetime
+bs4
+requests
+yfinance
+python-dotenv==1.0.1
+pdfkit
+# Core dependencies
+playwright==1.41.2
+microsoft-omniparser==0.2.0
+openai==1.12.0
+pytest==8.0.2
+pillow==10.2.0
+loguru==0.7.2

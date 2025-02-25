@@ -1,0 +1,18 @@
+I want to develop a web agent. It does the following, 
+-> First user sends in a task to complete 
+-> The first agent (Which is a LLM) decodes and splits the task into steps to be completed 
+-> The steps are then reviewed by another LLM that reviews task by task, breaks it down to a specific way such that the task uses a tool which will be provided to it for web crawling 
+-> The LLM will have the chance to invoke to tool as much as it wants
+-> The first tool is of course a selenium web crawler which takes in the command and executes it. The function executing it will split the tasks such as clicking a button, extractig a text, typing something specific etc as a switch statement for particular cases. 
+-> The LLM given the task and using the tool executes what to be completed using the web crawler.
+-> The web crawler takes a command, executes it and takes a screenshot. The screenshot is the passed through omni parser for plotting the bounding boxes for better capability for the vision LLM. 
+-> The screenshot is then returned to the Vision LLM and the LLM checks if the task is completed and executes the next step that it has drafted. 
+-> If in some cases it finds that the task is not completed, then it does it again doing some other method. 
+-> However, if after 2 tries it still gets task not completed it "saves" that into it's memory
+-> Memory component : the memory basically stores all the steps the model took to complete the task, the task, the nature of the task and the domain it was in along with the error it faced.
+-> The memory is stored in cosmos DB and then every day it is indexed into Azure AI Search. The components which are indexed are 1) The name of the task 2) The nature of the task. 
+-> We are going to use azure functions to execute a technique called "offline reinforcement" which basically looks at what went wrong, reasons through it and provides things to avoid. This could be websites, comands, and anything to avoid facing this error again and using recommendations on how to overcome it next time we face it. 
+-> This output is stored as metadata along side the embeddings from the Azure AI Search index. 
+-> Let's say the next time the model goes through 2 continous task not completed, it runs a semantic search on the task it performed to find the "closest" task to it. 
+-> If a task is found, it uses the reinforced learnings which is stored as a metadata for contextual reference and executes the task the third time. After the third time it still fails then we abort the task. 
+-> Remember the first LLM has the abilitiy to ask user as many clarifying questions as it can to the user to breakdown a vague task into measured and cleared task for the next VLM to execute it seamliessly. The other LLM will be a reasoning LLM using test time compute to really understand what went wrong for the offline Reinforcement task. 
