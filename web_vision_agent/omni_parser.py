@@ -1,3 +1,5 @@
+#Using this function only after we take a particular screenshot after a step 
+
 import asyncio
 from gradio_client import Client, handle_file
 from PIL import Image, ImageDraw
